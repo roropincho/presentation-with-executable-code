@@ -32063,9 +32063,15 @@ DrawingWindow.prototype.setShow = function (show) {
     vm.setCheckmark('data-cb-setting-graphics', 'show-drawing-window', show);
 
     if (show) {
+        /* -------------------------------------------------------------
+         * Modified by hand to allow for multiple instances of drawings
+         * ------------------------------------------------------------- */
         vm.root.querySelector(".cb-pixels-window").style.display = 'none';
         vm.root.querySelector('.cb-drawing-window').style.display = 'inline';
         var parent = vm.root.querySelector('.cb-drawing-window');
+        /* -------------------------------------------------------------
+         * End
+         * ------------------------------------------------------------- */
         dom_remove_children(parent);
         parent.appendChild(drawing_window.drawing_canvas);
         parent.appendChild(drawing_window.turtle_canvas);
