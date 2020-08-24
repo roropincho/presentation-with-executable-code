@@ -1,0 +1,133 @@
+pre code > span {
+  display: inline-block;
+  line-height: 1.25;
+}
+
+div.sourceCode {
+  /*
+  background-color: #f6f6f6!important;
+  */
+  height: auto!important;
+  overflow: visible;
+}
+
+.cb-file-container {
+  background-color: transparent;
+}
+
+.cb-vm > .cb-exec-controls {
+  margin-right: 10px;
+  opacity: 0;
+  top: 0;
+  transform: scale(0.5) translateY(-50%);
+  transform-origin: top right;
+  visibility: hidden;
+  z-index: 3;
+}
+
+.want-to-exec.cb-vm > .cb-exec-controls {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cb-vm .btn-exec-example {
+  bottom: 0;
+  display: block;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.want-to-exec.cb-vm .btn-exec-example {
+  display: none;
+}
+
+.cb-editors {
+  font-size: 30px;
+  margin: 0.5rem 1rem 2rem;
+  transition: 0.25s ease all;
+}
+
+.bad-version-of-pandoc > span {
+  /*
+  left: -196px;
+  position: relative;
+  */
+}
+
+.cb-console {
+  background-color: #e0e0e0;
+  border-radius: 1rem;
+  box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.2);
+  display: block!important;
+  height: auto;
+  left: 1rem;
+  margin: 0;
+  max-height: 25rem;
+  padding: 2rem;
+  position: absolute;
+  overflow: auto;
+  right: 1rem;
+  top: calc(100% - 1rem);
+  z-index: 4;
+}
+
+.cb-exec-controls .cb-step-counter,
+.cb-exec-controls-buttons {
+  box-shadow: 8px 8px 8px 3px rgba(0, 0, 0, 0.2);
+}
+
+.tippy-box[data-theme="cb-exec-point-bubble"] {
+  box-shadow: 4px 4px 8px 4px rgba(0, 0, 0, 0.25);
+}
+
+.cb-console.closed {
+  display: none!important;
+}
+
+.cb-console .close-btn {
+  color: black;
+  font-size: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  margin: 0;
+  position: absolute;
+  right: 0.2rem;
+  text-align: center;
+  top: 0;
+  vertical-align: middle;
+  width: 2rem;
+  z-index: 5;
+}
+
+.cb-vm .open-btn:hover,
+.cb-console .close-btn:hover {
+  cursor: pointer;
+}
+
+.cb-vm .open-btn {
+  margin: 0;
+  opacity: 0.5;
+  text-align: center;
+  transition: 0.25s ease all;
+  z-index: 3;
+}
+
+.cb-vm .open-btn svg {
+  transform: scale(0.75);
+  width: 1.8em;
+}
+
+.want-to-exec.cb-vm .open-btn.console-btn-visible,
+.want-to-exec.cb-vm .open-btn:hover {
+  opacity: 1;
+}
+
+.cb-vm:not(.want-to-exec) .open-btn {
+  opacity: 0;
+}
+
