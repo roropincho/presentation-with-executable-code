@@ -1,4 +1,3 @@
-// Fix problem with older version of pandoc not highlighting code correctly
 function fixCodeBlocks() {
     var isNotRecentPandoc = false;
 
@@ -24,37 +23,6 @@ function fixCodeBlocks() {
             line.classList.add("bad-version-of-pandoc");
         });
     }
-}
-
-function addExecButton(isAdd) {
-    document.querySelectorAll(".sourceCode").forEach(function (block) {
-        block.querySelectorAll(".cb-vm").forEach(function (VMblock) {
-            var newExecBtn = document.createElement("button");
-            newExecBtn.setAttribute("type", "button");
-            newExecBtn.onclick = function () {
-                VMblock.classList.add("want-to-exec");
-                VMblock.querySelector(".cb-console.closed").classList.remove("closed");
-                var vm = CodeBoot.prototype.getVM(VMblock);
-                vm.focusLastFocusedEditor();
-            };
-	        newExecBtn.innerHTML = "Exec!";
-            newExecBtn.classList.add("btn-exec-example");
-            VMblock.appendChild(newExecBtn);
-            console.log("HERE");
-        });
-
-        /*
-        function onClick(e) {
-        }
-
-        if (isAdd) {
-            block.addEventListener("click", onClick);
-        }
-        else {
-            block.attachEvent("onclick", onClick);
-        }
-        */
-    });
 }
 
 function addDragToConsole(isAdd) {
@@ -143,36 +111,39 @@ function addDragToConsole(isAdd) {
     }
 }
 
-function addRefresh(isAdd) {
-    document.querySelectorAll(".reveal .controls button").forEach(function (elem) {
-        function onClick() {
-            document.querySelectorAll(".slide.present .CodeMirror").forEach(function (e) {
-                e.CodeMirror.refresh();
-            });
-        }
+function refreshCode() {
+    document.querySelectorAll(".slide.present .CodeMirror").forEach(function (elem) {
+        elem.CodeMirror.refresh();
+        console.log(elem.CodeMirror);
+    });
+}
 
-        if (isAdd) {
-            elem.addEventListener("click", onClick);
-        }
-        else {
-            elem.attachEvent("onclick", onClick);
-        }
+function addRefresh(isAdd) {
+    document.querySelectorAll(".controls button").forEach(function (elem) {
+        if (isAdd)
+            elem.addEventListener("click", refreshCode);
+        else
+            elem.attachEvent("onclick", refreshCode);
+    });
+}
+
+function processFontSize() {
+    document.querySelectorAll("[data-cb-font-size]").forEach(function (elem) {
+        elem.querySelector(".cb-editors").style.fontSize = elem.getAttribute("data-cb-font-size") + "px";
     });
 }
 
 if (window.addEventListener) {
     window.addEventListener("load", function () {
         addDragToConsole(true);
-        //addExecButton(true);
         addRefresh(true);
-        fixCodeBlocks();
+        processFontSize();
     });
 }
 else {
     window.attachEvent("onload", function () {
         addDragToConsole(false)
-        //addExecButton(false);
         addRefresh(false);
-        fixCodeBlocks();
+        processFontSize();
     });
 }

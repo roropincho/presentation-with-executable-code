@@ -8,7 +8,7 @@ date: July 29, 2020
 
 ## Hello world
 
-~~~{.scm runable=}
+~~~{.scm runable= data-trim=}
 (alert "Hello world!")
 
 (alert (string-append
@@ -40,7 +40,7 @@ alert(x);
 
 ## et le dessin aussi?
 
-~~~{.js .cb-vm data-cb-lang=js-novice data-trim=true}
+~~~{.js .cb-vm data-cb-lang=js-novice data-trim=true data-cb-font-size=20}
 cs();
 lt(45);
 var nbPointes = 7;
