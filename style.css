@@ -60,6 +60,12 @@ div.sourceCode {
 }
 
 .cb-console {
+  display: block!important;
+  height: 0!important;
+}
+
+.cb-repl-container,
+.cb-playground {
   background-color: #e0e0e0;
   border-radius: 1rem;
   box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.2);
@@ -85,11 +91,13 @@ div.sourceCode {
   box-shadow: 4px 4px 8px 4px rgba(0, 0, 0, 0.25);
 }
 
-.cb-console.closed {
+.closed.cb-repl-container,
+.closed.cb-playground {
   display: none!important;
 }
 
-.cb-console .close-btn {
+.cb-repl-container .close-btn,
+.cb-playground .close-btn {
   color: black;
   font-size: 2rem;
   height: 2rem;
@@ -105,7 +113,8 @@ div.sourceCode {
 }
 
 .cb-vm .open-btn:hover,
-.cb-console .close-btn:hover {
+.cb-repl-container .close-btn:hover,
+.cb-playground .close-btn:hover {
   cursor: pointer;
 }
 
@@ -122,19 +131,19 @@ div.sourceCode {
   width: 1.8em;
 }
 
-.want-to-exec.cb-vm .open-btn:not(.console-btn-visible),
+.want-to-exec.cb-vm .open-btn.console-btn-visible,
 .want-to-exec.cb-vm .open-btn:hover {
     background-color: #007bff!important;
     color: white;
 }
 
-.want-to-exec.cb-vm .open-btn:not(.console-btn-visible) path.stroke,
-.want-to-exec.cb-vm .open-btn:hover path.stroke {
+.want-to-exec.cb-vm .open-btn.console-btn-visible .stroke,
+.want-to-exec.cb-vm .open-btn:hover .stroke {
     stroke: white;
 }
 
-.want-to-exec.cb-vm .open-btn:not(.console-btn-visible) path.fill,
-.want-to-exec.cb-vm .open-btn:hover path.fill {
+.want-to-exec.cb-vm .open-btn.console-btn-visible .fill,
+.want-to-exec.cb-vm .open-btn:hover .fill {
     fill: white;
 }
 
@@ -142,3 +151,6 @@ div.sourceCode {
   opacity: 0;
 }
 
+.CodeMirror-sizer {
+  min-height: 0!important;
+}

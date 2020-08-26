@@ -30743,7 +30743,6 @@ function CodeBootVM(cb, root, opts) {
     newExecBtn.classList.add("btn-exec-example");
     newExecBtn.onclick = function () {
         vm.root.classList.add("want-to-exec");
-        vm.root.querySelector(".cb-console.closed").classList.remove("closed");
         vm.trackEditorFocus(vm.fs.fem.editors[0].editor, null, true);
     };
     vm.root.appendChild(newExecBtn);

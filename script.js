@@ -26,7 +26,7 @@ function fixCodeBlocks() {
 }
 
 function addDragToConsole(isAdd) {
-    document.querySelectorAll(".sourceCode .cb-console").forEach(function (elem) {
+    document.querySelectorAll(".sourceCode .cb-console .cb-repl-container, .sourceCode .cb-console .cb-playground").forEach(function (elem) {
         function down(e) {
             if (e.srcElement === elem) {
                 if (e.buttons === 1) {// left click
@@ -45,23 +45,31 @@ function addDragToConsole(isAdd) {
         newBtn.innerHTML = "&Cross;";
         newBtn.onclick = function (e) {
             elem.classList.add("closed");
-            consoleBtn.classList.add("console-btn-visible");
+            consoleBtn.classList.toggle("console-btn-visible");
         };
         elem.appendChild(newBtn);
 
+        var isRepl = elem.classList.contains("cb-repl-container");
+
         consoleBtn.setAttribute("type", "button");
-        consoleBtn.setAttribute("title", "show/hide console");
+        consoleBtn.setAttribute("title", "show/hide " + (isRepl ? "console" : "playground"));
         consoleBtn.setAttribute("class", "btn btn-secondary cb-button open-btn");
         consoleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><g>'
-                                + '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="15" />' // the window
-                                + '<path class="fill" d="M 10 20 L 10 70 L 246 70 L 246 20 Z" />' // the top bar
-                                + '<path class="stroke" d="M 60 100 L 120 130 L 60 160" fill="none" stroke="black" stroke-width="15" />' // the 'cursor'
+                                + (isRepl
+                                    ? '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="15" />' // the window
+                                        + '<path class="fill" d="M 10 20 L 10 70 L 246 70 L 246 20 Z" />' // the top bar
+                                        + '<path class="stroke" d="M 60 100 L 120 130 L 60 160" fill="none" stroke="black" stroke-width="15" />' // the 'cursor'
+                                    : '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="15" />' // the window
+                                        + '<circle class="fill" cx="175" cy="125" r="40" fill="black" />' // a filled square
+                                        + '<path class="stroke" d="M 100 100 L 100 200 L 200 200 L 200 100 Z" fill="none" stroke="black" stroke-width="15" />' // the 'cursor'
+                                        + '<circle class="stroke" cx="100" cy="100" r="50" fill="none" stroke="black" stroke-width="15" />' // a drawing
+                                )
                                 + '</g></svg>';
         consoleBtn.onclick = function (e) {
             elem.classList.toggle("closed");
             consoleBtn.classList.toggle("console-btn-visible");
         }
-        elem.parentNode.querySelector(".cb-exec-controls .btn-group").appendChild(consoleBtn);
+        elem.parentNode.parentNode.querySelector(".cb-exec-controls .btn-group").appendChild(consoleBtn);
         elem.classList.add("closed");
         elem.setAttribute("data-dif-page-x", 0);
         elem.setAttribute("data-dif-page-y", 0);
@@ -76,7 +84,7 @@ function addDragToConsole(isAdd) {
 
     function move(e) {
         if (document.body.hasAttribute("data-clicked")) {
-            var block = document.querySelector(".sourceCode .cb-console[data-clicked=clicked]");
+            var block = document.querySelector(".sourceCode [data-clicked=clicked]");
             var tempX = e.pageX;
             var tempY = e.pageY;
             var difX = tempX
@@ -95,7 +103,7 @@ function addDragToConsole(isAdd) {
     function up(e) {
         if (document.body.hasAttribute("data-clicked")) {
             document.body.removeAttribute("data-clicked");
-            document.querySelector(".sourceCode .cb-console[data-clicked=clicked]").removeAttribute("data-clicked");
+            document.querySelector(".sourceCode [data-clicked=clicked]").removeAttribute("data-clicked");
         }
     }
 
