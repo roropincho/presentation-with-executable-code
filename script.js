@@ -137,7 +137,7 @@ function addRefresh(isAdd) {
 
 function processFontSize() {
     document.querySelectorAll("[data-cb-font-size]").forEach(function (elem) {
-        elem.querySelector(".cb-editors").style.fontSize = elem.getAttribute("data-cb-font-size") + "px";
+        elem.classList.add("cb-font-size-" + elem.getAttribute("data-cb-font-size"));
     });
 }
 
