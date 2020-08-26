@@ -111,7 +111,7 @@ div.sourceCode {
 
 .cb-vm .open-btn {
   margin: 0;
-  opacity: 0.5;
+  opacity: 1;
   text-align: center;
   transition: 0.25s ease all;
   z-index: 3;
@@ -122,9 +122,20 @@ div.sourceCode {
   width: 1.8em;
 }
 
-.want-to-exec.cb-vm .open-btn.console-btn-visible,
+.want-to-exec.cb-vm .open-btn:not(.console-btn-visible),
 .want-to-exec.cb-vm .open-btn:hover {
-  opacity: 1;
+    background-color: #007bff!important;
+    color: white;
+}
+
+.want-to-exec.cb-vm .open-btn:not(.console-btn-visible) path.stroke,
+.want-to-exec.cb-vm .open-btn:hover path.stroke {
+    stroke: white;
+}
+
+.want-to-exec.cb-vm .open-btn:not(.console-btn-visible) path.fill,
+.want-to-exec.cb-vm .open-btn:hover path.fill {
+    fill: white;
 }
 
 .cb-vm:not(.want-to-exec) .open-btn {

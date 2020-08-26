@@ -53,9 +53,9 @@ function addDragToConsole(isAdd) {
         consoleBtn.setAttribute("title", "show/hide console");
         consoleBtn.setAttribute("class", "btn btn-secondary cb-button open-btn");
         consoleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><g>'
-                                + '<path d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="15" />' // the window
-                                + '<path d="M 10 20 L 10 70 L 246 70 L 246 20 Z" />' // the top bar
-                                + '<path d="M 60 100 L 120 130 L 60 160" fill="none" stroke="black" stroke-width="15" />' // the 'cursor'
+                                + '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="15" />' // the window
+                                + '<path class="fill" d="M 10 20 L 10 70 L 246 70 L 246 20 Z" />' // the top bar
+                                + '<path class="stroke" d="M 60 100 L 120 130 L 60 160" fill="none" stroke="black" stroke-width="15" />' // the 'cursor'
                                 + '</g></svg>';
         consoleBtn.onclick = function (e) {
             elem.classList.toggle("closed");
