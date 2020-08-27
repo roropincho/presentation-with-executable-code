@@ -30742,6 +30742,7 @@ function CodeBootVM(cb, root, opts) {
     /* ---------------------------------------------------------------------
      * Added to be able to focus different editors and execute code when changing slide
      * --------------------------------------------------------------------- */
+    /*
     var newExecBtn = document.createElement("button");
     newExecBtn.setAttribute("type", "button");
     newExecBtn.innerHTML = "Exec!";
@@ -30753,6 +30754,29 @@ function CodeBootVM(cb, root, opts) {
         vm.trackEditorFocus(vm.fs.fem.editors[0].editor, null, true);
     };
     vm.root.appendChild(newExecBtn);
+	console.log(vm.root.parentNode);
+    */
+
+    var isFirstClick = true;
+
+    function onClickFunc(e) {
+        vm.root.classList.add("want-to-exec");
+
+        if (isFirstClick) {
+            vm.root.removeAttribute("data-cb-show-playground");
+            vm.root.removeAttribute("data-cb-show-repl-container");
+            vm.trackEditorFocus(vm.fs.fem.editors[0].editor, null, true);
+        }
+        
+        vm.root.parentNode.removeEventListener("click", onClickFunc);
+        isFirstClick = false;
+    }
+
+    var globalFuncName = "onClickFunc" + id.replace("#", "").replace("-", "").replace("-", "");
+    window[globalFuncName] = onClickFunc;
+
+    vm.root.parentNode.addEventListener("click", onClickFunc);
+    vm.root.parentNode.setAttribute("data-cb-custom-click-func", globalFuncName);
     /* ---------------------------------------------------------------------
      * End
      * --------------------------------------------------------------------- */

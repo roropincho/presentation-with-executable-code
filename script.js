@@ -144,15 +144,44 @@ function processFontSize() {
     });
 }
 
+function docClickFunc(event) {
+    var target = event.srcElement;
+    var isSource = target.classList.contains("sourceCode");
+    var isFocusedSource = isSource && target.querySelector(".want-to-exec.is-focused-code") != null;
+    var parentSource = target.closest(".sourceCode");
+    var isInSource = parentSource != null;
+    var isInFocusedSource = isInSource && parentSource.querySelector(".want-to-exec.is-focused-code") != null;
+
+    if (!isFocusedSource && !isInFocusedSource) {
+        document.querySelectorAll(".want-to-exec.is-focused-code").forEach(function (elem) {
+            elem.classList.remove("want-to-exec", "is-focused-code");
+            var parent = elem.closest(".sourceCode");
+            parent.addEventListener("click", window[parent.getAttribute("data-cb-custom-click-func")]);
+        });
+
+        var toModify = null;
+
+        if (isSource)
+            toModify = target.querySelector(".cb-vm");
+        else if (isInSource)
+            toModify = parentSource.querySelector(".cb-vm");
+
+        if (toModify !== null)
+            toModify.classList.add("is-focused-code");
+    }
+}
+
 if (window.addEventListener) {
     window.addEventListener("load", function () {
         addDragToConsole(true);
         processFontSize();
     });
+    window.addEventListener("click", docClickFunc);
 }
 else {
     window.attachEvent("onload", function () {
         addDragToConsole(false);
         processFontSize();
     });
+    window.attachEvent("onclick", docClickFunc);
 }
