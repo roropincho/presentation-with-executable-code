@@ -27,7 +27,7 @@ presentation
 
 ## Is CodeBoot working?
 
-~~~{.js .cb-vm data-cb-lang=js-novice data-trim=true}
+~~~{.js .cb-vm data-cb-lang=js-novice}
 var x = 3;
 
 for (var i = 0; i < x; i++)
@@ -40,7 +40,7 @@ alert(x);
 
 ## et le dessin aussi?
 
-~~~{.js .cb-vm data-cb-lang=js-novice data-trim=true data-cb-font-size=20}
+~~~{.js .cb-vm data-cb-lang=js-novice data-cb-font-size=20}
 cs();
 lt(45);
 var nbPointes = 7;
@@ -53,4 +53,55 @@ for (var i = 0; i < nbPointes; i++) {
 
   rt(360 / nbPointes);
 }
+~~~
+
+-------------------------------------------------------------------------------
+
+~~~{.js .cb-vm data-cb-lang=js-novice data-cb-font-size=50}
+cs();
+lt(45);
+
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(18);
+
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(18);
+
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(18);
+
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(18);
+
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
+lt(90);
+fd(50);
 ~~~

@@ -80,6 +80,8 @@ function W(e) {
                         + parseFloat(styleTemp.getPropertyValue("padding-left").replace("px", ""));
             bufferTop += parseFloat(styleTemp.getPropertyValue("margin-top").replace("px", ""))
                         + parseFloat(styleTemp.getPropertyValue("padding-top").replace("px", ""));
+            if (temp.classList.contains("CodeMirror-scroll"))
+                bufferTop -= temp.scrollTop;
         }
 
         var relativeGrandParent = relativeTo.parentNode.parentNode;
@@ -4226,7 +4228,10 @@ function A(e){return e.replace(/left|right|bottom|top/g,(function(e){return U[e]
 
     var different = from != display.viewFrom || to != display.viewTo ||
       display.lastWrapHeight != update.wrapperHeight || display.lastWrapWidth != update.wrapperWidth;
-    adjustView(cm, from, to);
+	  // Modified to avoid some weird adjustment of the number of visible lines on focus
+    // adjustView(cm, from, to);
+    adjustView(cm, from, end);
+	  // * End
 
     display.viewOffset = heightAtLine(getLine(cm.doc, display.viewFrom));
     // Position the mover div to align with the current scroll position
@@ -30743,6 +30748,8 @@ function CodeBootVM(cb, root, opts) {
     newExecBtn.classList.add("btn-exec-example");
     newExecBtn.onclick = function () {
         vm.root.classList.add("want-to-exec");
+        vm.root.removeAttribute("data-cb-show-playground");
+        vm.root.removeAttribute("data-cb-show-repl-container");
         vm.trackEditorFocus(vm.fs.fem.editors[0].editor, null, true);
     };
     vm.root.appendChild(newExecBtn);
@@ -31316,7 +31323,10 @@ CodeBootVM.prototype.hideTooltip = function () {
     var vm = this;
 
     //TODO: limit to the VM
-    $('[data-toggle="tooltip"]').tooltip('hide');
+	// modified to allow multiple instances
+    //$('[data-toggle="tooltip"]').tooltip('hide');
+    $(vm.root.querySelector('[data-toggle="tooltip"]')).tooltip('hide');
+	// * End
 };
 
 CodeBootVM.prototype.setupEventHandlers = function () {
@@ -31482,9 +31492,15 @@ CodeBootVM.prototype.setDevMode = function (devMode) {
 
         vm.setAttribute('data-cb-dev-mode', devMode);
         if (vm.devMode) {
-            $('.cb-menu-brand-btn-mode').text(' (dev mode)');
+		// for multiple instances
+            //$('.cb-menu-brand-btn-mode').text(' (dev mode)');
+            $(vm.root.querySelector('.cb-menu-brand-btn-mode')).text(' (dev mode)');
+		// * End
         } else {
-            $('.cb-menu-brand-btn-mode').text('');
+            // for multiple instances
+            //$('.cb-menu-brand-btn-mode').text('');
+            $(vm.root.querySelector('.cb-menu-brand-btn-mode')).text('');
+            // * End
         }
 
         vm.stateChanged();
@@ -32059,8 +32075,12 @@ DrawingWindow.prototype.setShow = function (show) {
         /* -------------------------------------------------------------
          * Modified by hand to allow for multiple instances of drawings
          * ------------------------------------------------------------- */
+        /*
         vm.root.querySelector(".cb-pixels-window").style.display = 'none';
         vm.root.querySelector('.cb-drawing-window').style.display = 'inline';
+        */
+        vm.root.removeAttribute("data-cb-show-pixels-window");
+        vm.root.setAttribute("data-cb-show-drawing-window", true);
         var parent = vm.root.querySelector('.cb-drawing-window');
         /* -------------------------------------------------------------
          * End
@@ -32071,27 +32091,36 @@ DrawingWindow.prototype.setShow = function (show) {
         parent.appendChild(drawing_window.grid_canvas);
         update_playground_visibility(vm);
     } else {
-        var parent = document.querySelector('.cb-drawing-window');
+        /* -------------------------------------------------------------
+         * Modified by hand to allow for multiple instances of drawings
+         * ------------------------------------------------------------- */
+        var parent = vm.root.querySelector('.cb-drawing-window');
         dom_remove_children(parent);
-        $('.cb-drawing-window').css('display', 'none');
+        vm.root.removeAttribute("data-cb-show-drawing-window");
+        //$('.cb-drawing-window').css('display', 'none');
+        /* -------------------------------------------------------------
+         * End
+         * ------------------------------------------------------------- */
         update_playground_visibility(vm);
     }
 };
 
 function update_playground_visibility(vm) {
+    // modified for multiple instances
     var drawing_window_visible =
-        $('.cb-drawing-window').css('display') !== 'none';
+        $(vm.root.querySelector('.cb-drawing-window')).css('display') !== 'none';
     var pixels_window_visible =
-        $('.cb-pixels-window').css('display') !== 'none';
-    $('a[data-cb-setting-graphics="show-drawing-window"] > span')
+        $(vm.root.querySelector('.cb-pixels-window')).css('display') !== 'none';
+    $(vm.root.querySelector('a[data-cb-setting-graphics="show-drawing-window"] > span'))
         .css('visibility', drawing_window_visible ? 'visible' : 'hidden');
-    $('a[data-cb-setting-graphics="show-pixels-window"] > span')
+    $(vm.root.querySelector('a[data-cb-setting-graphics="show-pixels-window"] > span'))
         .css('visibility', pixels_window_visible ? 'visible' : 'hidden');
-    if (true || drawing_window_visible || pixels_window_visible || $('#b').html() !== '') {
+    if (true || drawing_window_visible || pixels_window_visible || $(vm.root.querySelector('#b')).html() !== '') {
         vm.setAttribute('data-cb-show-playground', true);
     } else {
         vm.setAttribute('data-cb-show-playground', false);
     }
+    // * End
 }
 
 DrawingWindow.prototype.ensure_showing = function () {
@@ -32102,7 +32131,10 @@ DrawingWindow.prototype.ensure_showing = function () {
 }
 
 DrawingWindow.prototype.showing = function () {
-    return $('.cb-drawing-window').is(':visible');
+	// modif to allow for multiple drawing instances
+    //return $('.cb-drawing-window').is(':visible');
+    return this.vm.root.hasAttribute('data-cb-show-drawing-window');
+	// * End
 }
 
 function builtin_cs(width, height) {
@@ -32351,7 +32383,10 @@ PixelsWindow.prototype.exportScreen = function () {
 };
 
 PixelsWindow.prototype.showing = function () {
-    return $('.cb-pixels-window').is(':visible');
+	// Modified to allow for multiple instances
+    //return $('.cb-pixels-window').is(':visible');
+	return this.vm.root.hasAttribute('data-cb-show-drawing-window');
+	// * End
 }
 
 PixelsWindow.prototype.setShow = function (show) {
@@ -32362,17 +32397,34 @@ PixelsWindow.prototype.setShow = function (show) {
     vm.setCheckmark('data-cb-setting-graphics', 'show-pixels-window', show);
 
     if (show) {
-        $('.cb-drawing-window').css('display', 'none');
-        $('.cb-pixels-window').css('display', 'inline');
-        var parent = document.querySelector('.cb-pixels-window');
+        /* -------------------------------------------------------------
+         * Modified by hand to allow for multiple instances of pixel windows
+         * ------------------------------------------------------------- */
+        /*
+        vm.root.querySelector('.cb-drawing-window').display = 'none';
+        vm.root.querySelector('.cb-pixels-window').display = 'inline';
+        */
+        vm.root.removeAttribute("data-cb-show-drawing-window");
+        vm.root.setAttribute("data-cb-show-pixels-window", true);
+        var parent = vm.root.querySelector('.cb-pixels-window');
+        /* -------------------------------------------------------------
+         * End
+         * ------------------------------------------------------------- */
         dom_remove_children(parent);
         parent.appendChild(pixels_window.grid_canvas);
         parent.appendChild(pixels_window.pixels_canvas);
         update_playground_visibility(vm);
     } else {
-        var parent = document.querySelector('.cb-pixels-window');
+        /* -------------------------------------------------------------
+         * Modified by hand to allow for multiple instances of pixel windows
+         * ------------------------------------------------------------- */
+        var parent = vm.root.querySelector('.cb-pixels-window');
         dom_remove_children(parent);
-        $('.cb-pixels-window').css('display', 'none');
+        vm.root.removeAttribute("data-cb-show-pixels-window");
+        //$('.cb-pixels-window').css('display', 'none');
+        /* -------------------------------------------------------------
+         * End
+         * ------------------------------------------------------------- */
         update_playground_visibility(vm);
     }
 };
@@ -32678,10 +32730,14 @@ CodeBootVM.prototype.replay = function () {
 };
 
 CodeBootVM.prototype.showTryMeTooltip = function (filename) {
-    $('.cb-exec-controls-buttons').tooltip('show');
+    // Modified to allow multiple instances
+    $(this.root.querySelector('.cb-exec-controls-buttons')).tooltip('show');
+    // * End
 
     // Auto hide the tooltip after 2 secs
-    setTimeout(function () { $('.cb-exec-controls-buttons').tooltip('hide'); }, 2000);
+    // Modified for multiple instances
+    setTimeout(function () { $(this.root.querySelecotr('.cb-exec-controls-buttons')).tooltip('hide'); }, 2000);
+    // * End
 };
 
 CodeBootVM.prototype.modeStopped = function () {
@@ -33438,7 +33494,9 @@ CodeBootVM.prototype.showExecPoint = function () {
     var value = vm.lang.getResult();
     var $container;
     if (loc.container instanceof SourceContainerInternalFile) {
-        $container = $('#cb-editors');
+        // Modified for multiple instances
+        $container = $(vm.root.querySelector('.cb-editors'));
+        // * End
     } else {
         $container = null; /* use whole document */
     }
@@ -33456,11 +33514,13 @@ CodeBootVM.prototype.showExecPoint = function () {
         vm.execPointCodeElement(),
         vm.lang.executionStateHTML());
 
-    $('.cb-exec-point-code').hover(function (event) {
+    // Modified for multiple instances
+    $(vm.root.querySelector('.cb-exec-point-code')).hover(function (event) {
         if (!vm.ui.execPointBubble.isVisible()) {
             vm.showExecPoint();
         }
     });
+    // * End
 };
 
 /*
@@ -34689,7 +34749,9 @@ CodeBootVM.prototype.replAddTranscript = function (text, cssClass) {
 
 CodeBootVM.prototype.scrollTo = function (elementOrSelector) {
     var elementOffset = $(elementOrSelector).position().top;
-    $('.cb-editors').animate({scrollTop: elementOffset}, 400);
+    // Modified for multiple instances
+    $(this.root.querySelector('.cb-editors')).animate({scrollTop: elementOffset}, 400);
+    // * End
 };
 
 /* ----- Internal file system ----- */

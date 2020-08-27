@@ -48,7 +48,8 @@ div.sourceCode {
 
 .cb-editors {
   font-size: 30px;
-  margin: 0.5rem 1rem 2rem;
+  height: auto;
+  margin: 0.5rem 1rem;
   transition: 0.25s ease all;
 }
 
@@ -59,17 +60,19 @@ div.sourceCode {
   */
 }
 
-.cb-console {
+.cb-console,
+.cb-playground {
   display: block!important;
   height: 0!important;
 }
 
 .cb-repl-container,
-.cb-playground {
+.cb-drawing-window,
+.cb-pixels-window {
   background-color: #e0e0e0;
   border-radius: 1rem;
   box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.2);
-  display: block!important;
+  display: none!important;
   height: auto;
   left: 1rem;
   margin: 0;
@@ -91,30 +94,15 @@ div.sourceCode {
   box-shadow: 4px 4px 8px 4px rgba(0, 0, 0, 0.25);
 }
 
-.closed.cb-repl-container,
-.closed.cb-playground {
-  display: none!important;
+.cb-vm.want-to-exec[data-cb-show-repl-container] .cb-repl-container,
+.cb-vm.want-to-exec[data-cb-show-drawing-window] .cb-playground,
+.cb-vm.want-to-exec[data-cb-show-drawing-window] .cb-drawing-window,
+.cb-vm.want-to-exec[data-cb-show-pixels-window] .cb-playground,
+.cb-vm.want-to-exec[data-cb-show-pixels-window] .cb-pixels-window {
+  display: block!important;
 }
 
-.cb-repl-container .close-btn,
-.cb-playground .close-btn {
-  color: black;
-  font-size: 2rem;
-  height: 2rem;
-  line-height: 2rem;
-  margin: 0;
-  position: absolute;
-  right: 0.2rem;
-  text-align: center;
-  top: 0;
-  vertical-align: middle;
-  width: 2rem;
-  z-index: 5;
-}
-
-.cb-vm .open-btn:hover,
-.cb-repl-container .close-btn:hover,
-.cb-playground .close-btn:hover {
+.cb-vm .open-btn:hover {
   cursor: pointer;
 }
 
@@ -131,18 +119,24 @@ div.sourceCode {
   width: 1.8em;
 }
 
-.want-to-exec.cb-vm .open-btn.console-btn-visible,
+.want-to-exec.cb-vm[data-cb-show-repl-container] .open-btn.btn-repl-container,
+.want-to-exec.cb-vm[data-cb-show-drawing-window] .open-btn.btn-drawing-window,
+.want-to-exec.cb-vm[data-cb-show-pixels-window] .open-btn.btn-pixels-window,
 .want-to-exec.cb-vm .open-btn:hover {
     background-color: #007bff!important;
     color: white;
 }
 
-.want-to-exec.cb-vm .open-btn.console-btn-visible .stroke,
+.want-to-exec.cb-vm[data-cb-show-repl-container] .open-btn.btn-repl-container .stroke,
+.want-to-exec.cb-vm[data-cb-show-drawing-window] .open-btn.btn-drawing-window .stroke,
+.want-to-exec.cb-vm[data-cb-show-pixels-window] .open-btn.btn-pixels-window .stroke,
 .want-to-exec.cb-vm .open-btn:hover .stroke {
     stroke: white;
 }
 
-.want-to-exec.cb-vm .open-btn.console-btn-visible .fill,
+.want-to-exec.cb-vm[data-cb-show-repl-container] .open-btn.btn-repl-container .fill,
+.want-to-exec.cb-vm[data-cb-show-drawing-window] .open-btn.btn-drawing-window .fill,
+.want-to-exec.cb-vm[data-cb-show-pixels-window] .open-btn.btn-pixels-window .fill,
 .want-to-exec.cb-vm .open-btn:hover .fill {
     fill: white;
 }
@@ -152,8 +146,10 @@ div.sourceCode {
 }
 
 .CodeMirror-sizer {
-  min-height: 0!important;
+  min-height: 100%!important;
 }
+
+/* Possibility to choose the example's font size */
 
 .cb-font-size-5 [data-tippy-root], .cb-font-size-5 .cb-editors { font-size: 5%; }
 .cb-font-size-10 [data-tippy-root], .cb-font-size-10 .cb-editors { font-size: 10%; }
@@ -174,3 +170,27 @@ div.sourceCode {
 .cb-font-size-85 [data-tippy-root], .cb-font-size-85 .cb-editors { font-size: 85%; }
 .cb-font-size-90 [data-tippy-root], .cb-font-size-90 .cb-editors { font-size: 90%; }
 .cb-font-size-95 [data-tippy-root], .cb-font-size-95 .cb-editors { font-size: 95%; }
+
+/* For overflowing slides */
+.reveal .slide {
+  height: calc(100% - 40px);
+  max-height: calc(100% - 40px);
+  padding-bottom: 0!important;
+  overflow: auto;
+}
+
+div.sourceCode {
+  margin-left: 50px!important;
+  margin-right: 50px!important;
+}
+
+.sourceCode .cb-vm .CodeMirror-scroll {
+  max-height: 586px;
+}
+
+.CodeMirror-vscrollbar,
+.CodeMirror-hscrollbar,
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+  z-index: 2;
+}

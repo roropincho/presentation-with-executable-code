@@ -26,7 +26,7 @@ function fixCodeBlocks() {
 }
 
 function addDragToConsole(isAdd) {
-    document.querySelectorAll(".sourceCode .cb-console .cb-repl-container, .sourceCode .cb-console .cb-playground").forEach(function (elem) {
+    document.querySelectorAll(".sourceCode .cb-console .cb-repl-container, .sourceCode .cb-console .cb-drawing-window, .sourceCode .cb-console .cb-pixels-window").forEach(function (elem) {
         function down(e) {
             if (e.srcElement === elem) {
                 if (e.buttons === 1) {// left click
@@ -38,39 +38,58 @@ function addDragToConsole(isAdd) {
             }
         }
         
-        var newBtn = document.createElement("p");
+        var partialClass = ["repl-container", "drawing-window", "pixels-window"];
+        var partialSvg = ['<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="20" />' // the window
+                                + '<path class="fill" d="M 10 20 L 10 70 L 246 70 L 246 20 Z" />' // the top bar
+                                + '<path class="stroke" d="M 60 100 L 120 130 L 60 160" fill="none" stroke="black" stroke-width="20" />' // the 'cursor
+                            , '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="20" />' // the window
+                                + '<circle class="fill" cx="175" cy="125" r="40" fill="black" />' // a filled square
+                                + '<path class="stroke" d="M 100 100 L 100 200 L 200 200 L 200 100 Z" fill="none" stroke="black" stroke-width="20" />' // a square
+                                + '<circle class="stroke" cx="100" cy="100" r="50" fill="none" stroke="black" stroke-width="20" />' // a drawing
+                            , '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="20" />' // the window
+                            ];
+        var nbCol = 3;
+        var nbRow = 3;
+        var gutter = 20;
+        var heightPixel = (226 - 30 - gutter * (nbRow + 1)) / nbRow;
+        var widthPixel = (236 - 20 - gutter * (nbCol + 1)) / nbCol;
+
+        for (var i = 0; i < nbRow; i++) {
+            for (var j = 0; j < nbCol; j++) {
+                var xStart = j * (widthPixel + gutter) + 20 + gutter;
+                var yStart = i * (heightPixel + gutter) + 30 + gutter;
+                var xEnd = xStart + widthPixel;
+                var yEnd = yStart + heightPixel;
+                partialSvg[2] += '<path class="fill" d="M ' + xStart + ' ' + yStart + ' L ' + xStart + ' ' + yEnd + ' L ' + xEnd + ' ' + yEnd + ' L ' + xEnd + ' ' + yStart + ' Z" fill="black" />';
+            }
+        }
+
+        var partialTitle = ["repl", "drawing window", "pixels window"];
+        var typeElem = elem.classList.contains("cb-repl-container")
+                        ? 0
+                        : elem.classList.contains("cb-drawing-window")
+                            ? 1
+                            : 2;
+        var elemClass = "data-cb-show-" + partialClass[typeElem];
         var consoleBtn = document.createElement("button");
 
-        newBtn.classList.add("close-btn");
-        newBtn.innerHTML = "&Cross;";
-        newBtn.onclick = function (e) {
-            elem.classList.add("closed");
-            consoleBtn.classList.toggle("console-btn-visible");
-        };
-        elem.appendChild(newBtn);
-
-        var isRepl = elem.classList.contains("cb-repl-container");
-
         consoleBtn.setAttribute("type", "button");
-        consoleBtn.setAttribute("title", "show/hide " + (isRepl ? "console" : "playground"));
-        consoleBtn.setAttribute("class", "btn btn-secondary cb-button open-btn");
+        consoleBtn.setAttribute("title", "show/hide " + partialTitle[typeElem]);
+        consoleBtn.setAttribute("class", "btn btn-secondary cb-button open-btn btn-" + partialClass[typeElem]);
         consoleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><g>'
-                                + (isRepl
-                                    ? '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="15" />' // the window
-                                        + '<path class="fill" d="M 10 20 L 10 70 L 246 70 L 246 20 Z" />' // the top bar
-                                        + '<path class="stroke" d="M 60 100 L 120 130 L 60 160" fill="none" stroke="black" stroke-width="15" />' // the 'cursor'
-                                    : '<path class="stroke" d="M 10 20 L 10 236 L 246 236 L 246 20 Z" fill="none" stroke="black" stroke-width="15" />' // the window
-                                        + '<circle class="fill" cx="175" cy="125" r="40" fill="black" />' // a filled square
-                                        + '<path class="stroke" d="M 100 100 L 100 200 L 200 200 L 200 100 Z" fill="none" stroke="black" stroke-width="15" />' // the 'cursor'
-                                        + '<circle class="stroke" cx="100" cy="100" r="50" fill="none" stroke="black" stroke-width="15" />' // a drawing
-                                )
+                                + partialSvg[typeElem]
                                 + '</g></svg>';
         consoleBtn.onclick = function (e) {
-            elem.classList.toggle("closed");
+            var vmTemp = elem.closest(".cb-vm");
+
+            if (vmTemp.hasAttribute(elemClass))
+                vmTemp.removeAttribute(elemClass);
+            else
+                vmTemp.setAttribute(elemClass, true);
+
             consoleBtn.classList.toggle("console-btn-visible");
         }
-        elem.parentNode.parentNode.querySelector(".cb-exec-controls .btn-group").appendChild(consoleBtn);
-        elem.classList.add("closed");
+        elem.closest(".cb-vm").querySelector(".cb-exec-controls .btn-group").appendChild(consoleBtn);
         elem.setAttribute("data-dif-page-x", 0);
         elem.setAttribute("data-dif-page-y", 0);
 
@@ -119,22 +138,6 @@ function addDragToConsole(isAdd) {
     }
 }
 
-function refreshCode() {
-    document.querySelectorAll(".slide.present .CodeMirror").forEach(function (elem) {
-        elem.CodeMirror.refresh();
-        console.log(elem.CodeMirror);
-    });
-}
-
-function addRefresh(isAdd) {
-    document.querySelectorAll(".controls button").forEach(function (elem) {
-        if (isAdd)
-            elem.addEventListener("click", refreshCode);
-        else
-            elem.attachEvent("onclick", refreshCode);
-    });
-}
-
 function processFontSize() {
     document.querySelectorAll("[data-cb-font-size]").forEach(function (elem) {
         elem.classList.add("cb-font-size-" + elem.getAttribute("data-cb-font-size"));
@@ -144,14 +147,12 @@ function processFontSize() {
 if (window.addEventListener) {
     window.addEventListener("load", function () {
         addDragToConsole(true);
-        addRefresh(true);
         processFontSize();
     });
 }
 else {
     window.attachEvent("onload", function () {
-        addDragToConsole(false)
-        addRefresh(false);
+        addDragToConsole(false);
         processFontSize();
     });
 }

@@ -264,7 +264,15 @@
             { src: 'https://unpkg.com/reveal.js@^4//plugin/math/math.js', async: true },
           $endif$
           { src: 'https://unpkg.com/reveal.js@^4//plugin/notes/notes.js', async: true }
-        ]
+        ],
+        keyboardCondition: function () {
+          return document.querySelector(".want-to-exec") === null;
+        }
+      });
+      Reveal.on("slidechanged", function (event) {
+        event.currentSlide.querySelectorAll(".CodeMirror").forEach(function (elem) {
+          elem.CodeMirror.refresh();
+        });
       });
     </script>
     $for(include-after)$
