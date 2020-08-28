@@ -31,7 +31,7 @@ presentation
 var x = 3;
 
 for (var i = 0; i < x; i++)
-    alert(i);
+  alert(i);
 
 alert(x);
 ~~~

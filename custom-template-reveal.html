@@ -274,6 +274,13 @@
           elem.CodeMirror.refresh();
         });
       });
+
+      document.querySelectorAll("pre code").forEach(function (block) {
+        block.childNodes.forEach(function (child) {
+          if (child.nodeName === "#text")
+            child.textContent = "\n";
+        });
+      });
     </script>
     $for(include-after)$
       $include-after$

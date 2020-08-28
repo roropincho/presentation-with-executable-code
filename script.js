@@ -1,8 +1,12 @@
 function fixCodeBlocks() {
-    var isNotRecentPandoc = false;
+	/*
+    if (document.querySelector("pre code > a") !== null) {
+        document.querySelectorAll(".CodeMirror-code").forEach(function (block) {
+            block.classList.add("bad-version-of-pandoc");
+        });
+    }
 
     document.querySelectorAll("pre code > a").forEach(function (oldLine) {
-        isNotRecentPandoc = true;
         var newLine = document.createElement("span");
         newLine.id = oldLine.id;
         var newLink = document.createElement("a");
@@ -17,12 +21,7 @@ function fixCodeBlocks() {
                 child.textContent = "\n";
         });
     });
-
-    if (isNotRecentPandoc) {
-        document.querySelectorAll(".CodeMirror-code pre + pre").forEach(function (line) {
-            line.classList.add("bad-version-of-pandoc");
-        });
-    }
+    */
 }
 
 function addDragToConsole(isAdd) {
@@ -174,6 +173,7 @@ function docClickFunc(event) {
 if (window.addEventListener) {
     window.addEventListener("load", function () {
         addDragToConsole(true);
+        fixCodeBlocks();
         processFontSize();
     });
     window.addEventListener("click", docClickFunc);
@@ -181,6 +181,7 @@ if (window.addEventListener) {
 else {
     window.attachEvent("onload", function () {
         addDragToConsole(false);
+        fixCodeBlocks();
         processFontSize();
     });
     window.attachEvent("onclick", docClickFunc);

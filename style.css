@@ -53,13 +53,6 @@ div.sourceCode {
   transition: 0.25s ease all;
 }
 
-.bad-version-of-pandoc > span {
-  /*
-  left: -196px;
-  position: relative;
-  */
-}
-
 .cb-console,
 .cb-playground {
   display: block!important;
@@ -151,25 +144,25 @@ div.sourceCode {
 
 /* Possibility to choose the example's font size */
 
-/* .cb-font-size-5 [data-tippy-root],  */.cb-font-size-5 .cb-editors { font-size: 5%; }
-/* .cb-font-size-10 [data-tippy-root],  */.cb-font-size-10 .cb-editors { font-size: 10%; }
-/* .cb-font-size-15 [data-tippy-root],  */.cb-font-size-15 .cb-editors { font-size: 15%; }
-/* .cb-font-size-20 [data-tippy-root],  */.cb-font-size-20 .cb-editors { font-size: 20%; }
-/* .cb-font-size-25 [data-tippy-root],  */.cb-font-size-25 .cb-editors { font-size: 25%; }
-/* .cb-font-size-30 [data-tippy-root],  */.cb-font-size-30 .cb-editors { font-size: 30%; }
-/* .cb-font-size-35 [data-tippy-root],  */.cb-font-size-35 .cb-editors { font-size: 35%; }
-/* .cb-font-size-40 [data-tippy-root],  */.cb-font-size-40 .cb-editors { font-size: 40%; }
-/* .cb-font-size-45 [data-tippy-root],  */.cb-font-size-45 .cb-editors { font-size: 45%; }
-/* .cb-font-size-50 [data-tippy-root],  */.cb-font-size-50 .cb-editors { font-size: 50%; }
-/* .cb-font-size-55 [data-tippy-root],  */.cb-font-size-55 .cb-editors { font-size: 55%; }
-/* .cb-font-size-60 [data-tippy-root],  */.cb-font-size-60 .cb-editors { font-size: 60%; }
-/* .cb-font-size-65 [data-tippy-root],  */.cb-font-size-65 .cb-editors { font-size: 65%; }
-/* .cb-font-size-70 [data-tippy-root],  */.cb-font-size-70 .cb-editors { font-size: 70%; }
-/* .cb-font-size-75 [data-tippy-root],  */.cb-font-size-75 .cb-editors { font-size: 75%; }
-/* .cb-font-size-80 [data-tippy-root],  */.cb-font-size-80 .cb-editors { font-size: 80%; }
-/* .cb-font-size-85 [data-tippy-root],  */.cb-font-size-85 .cb-editors { font-size: 85%; }
-/* .cb-font-size-90 [data-tippy-root],  */.cb-font-size-90 .cb-editors { font-size: 90%; }
-/* .cb-font-size-95 [data-tippy-root],  */.cb-font-size-95 .cb-editors { font-size: 95%; }
+.cb-font-size-05 .cb-editors { font-size:  5%; }
+.cb-font-size-10 .cb-editors { font-size: 10%; }
+.cb-font-size-15 .cb-editors { font-size: 15%; }
+.cb-font-size-20 .cb-editors { font-size: 20%; }
+.cb-font-size-25 .cb-editors { font-size: 25%; }
+.cb-font-size-30 .cb-editors { font-size: 30%; }
+.cb-font-size-35 .cb-editors { font-size: 35%; }
+.cb-font-size-40 .cb-editors { font-size: 40%; }
+.cb-font-size-45 .cb-editors { font-size: 45%; }
+.cb-font-size-50 .cb-editors { font-size: 50%; }
+.cb-font-size-55 .cb-editors { font-size: 55%; }
+.cb-font-size-60 .cb-editors { font-size: 60%; }
+.cb-font-size-65 .cb-editors { font-size: 65%; }
+.cb-font-size-70 .cb-editors { font-size: 70%; }
+.cb-font-size-75 .cb-editors { font-size: 75%; }
+.cb-font-size-80 .cb-editors { font-size: 80%; }
+.cb-font-size-85 .cb-editors { font-size: 85%; }
+.cb-font-size-90 .cb-editors { font-size: 90%; }
+.cb-font-size-95 .cb-editors { font-size: 95%; }
 
 /* For overflowing slides */
 .reveal .slide {
