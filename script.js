@@ -1,29 +1,3 @@
-function fixCodeBlocks() {
-	/*
-    if (document.querySelector("pre code > a") !== null) {
-        document.querySelectorAll(".CodeMirror-code").forEach(function (block) {
-            block.classList.add("bad-version-of-pandoc");
-        });
-    }
-
-    document.querySelectorAll("pre code > a").forEach(function (oldLine) {
-        var newLine = document.createElement("span");
-        newLine.id = oldLine.id;
-        var newLink = document.createElement("a");
-        newLink.href = "#" + oldLine.id;
-        newLink.setAttribute("aria-hidden", "true");
-        newLine.innerHTML = newLink.outerHTML + oldLine.innerHTML;
-        oldLine.parentNode.replaceChild(newLine, oldLine);
-    });
-    document.querySelectorAll("pre code").forEach(function (block) {
-        block.childNodes.forEach(function (child) {
-            if (child.nodeName === "#text")
-                child.textContent = "\n";
-        });
-    });
-    */
-}
-
 function addDragToConsole(isAdd) {
     document.querySelectorAll(".sourceCode .cb-console .cb-repl-container, .sourceCode .cb-console .cb-drawing-window, .sourceCode .cb-console .cb-pixels-window").forEach(function (elem) {
         function down(e) {
@@ -143,7 +117,7 @@ function processFontSize() {
     });
 }
 
-function docClickFunc(event) {
+function docClickFunc(event, isAdd) {
     var target = event.srcElement;
     var isSource = target.classList.contains("sourceCode");
     var isFocusedSource = isSource && target.querySelector(".want-to-exec.is-focused-code") != null;
@@ -155,7 +129,12 @@ function docClickFunc(event) {
         document.querySelectorAll(".want-to-exec.is-focused-code").forEach(function (elem) {
             elem.classList.remove("want-to-exec", "is-focused-code");
             var parent = elem.closest(".sourceCode");
-            parent.addEventListener("click", window[parent.getAttribute("data-cb-custom-click-func")]);
+            var clickFunction = window[parent.getAttribute("data-cb-custom-click-func")];
+
+            if (isAdd)
+                parent.addEventListener("click", clickFunction, true);
+            else
+                parent.attachEvent("onclick", clickFunction);
         });
 
         var toModify = null;
@@ -170,19 +149,69 @@ function docClickFunc(event) {
     }
 }
 
+function addVMClick(isAdd) {
+    var cb = new CodeBoot();
+
+    if (cb !== undefined && cb.vms !== null) {
+        var nbVM = document.querySelectorAll(".cb-vm").length;
+        var vmList = [];
+
+        for (var i = 1; i <= nbVM; i++)
+            vmList.push(cb.vms["#cb-vm-" + i]);
+
+        vmList.forEach(function (vm) {
+            var isFirstClick = true;
+
+            function onClickFunc() {
+                var parent = document.getElementById(vm.root.parentNode.id);
+                vm.root.classList.add("want-to-exec");
+
+                if (isFirstClick) {
+                    vm.root.removeAttribute("data-cb-show-playground");
+                    vm.root.removeAttribute("data-cb-show-repl-container");
+                    vm.trackEditorFocus(vm.fs.fem.editors[0].editor, null, true);
+                }
+
+                if (isAdd)
+                    vm.root.parentNode.removeEventListener("click", onClickFunc);
+                else
+                    vm.root.parentNode.detachEvent("onclick", onClickFunc);
+
+                isFirstClick = false;
+            }
+
+
+            var globalFuncName = "onClickFunccbvm" + i;
+            window[globalFuncName] = onClickFunc;
+            vm.root.parentNode.setAttribute("data-cb-custom-click-func", globalFuncName);
+
+            if (isAdd)
+                vm.root.parentNode.addEventListener("click", onClickFunc, true);
+            else
+                vm.root.parentNode.attachEvent("onclick", onClickFunc);
+        });
+    }
+}
+
 if (window.addEventListener) {
     window.addEventListener("load", function () {
+        window.addEventListener("click", function (e) {
+            docClickFunc(e, true);
+        });
+
         addDragToConsole(true);
-        fixCodeBlocks();
+        addVMClick(true);
         processFontSize();
     });
-    window.addEventListener("click", docClickFunc);
 }
 else {
     window.attachEvent("onload", function () {
+        window.attachEvent("onclick", function (e) {
+            docClickFunc(e, false);
+        });
+
         addDragToConsole(false);
-        fixCodeBlocks();
+        addVMClick(false);
         processFontSize();
     });
-    window.attachEvent("onclick", docClickFunc);
 }
