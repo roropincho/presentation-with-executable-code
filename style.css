@@ -107,6 +107,12 @@ div.sourceCode {
   z-index: 3;
 }
 
+.cb-vm:not([data-cb-show-repl-container]) .btn-repl-container,
+.cb-vm:not([data-cb-show-drawing-window]) .btn-drawing-window,
+.cb-vm:not([data-cb-show-pixels-window]) .btn-pixels-window {
+  display: none;
+}
+
 .cb-vm .open-btn svg {
   transform: scale(0.75);
   width: 1.8em;
